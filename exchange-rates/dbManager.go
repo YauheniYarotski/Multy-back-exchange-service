@@ -55,23 +55,23 @@ func NewDbManager(configuration DBConfiguration) *DbManager {
 }
 
 func (b *DbManager) connectDb(configuration DBConfiguration) *sql.DB {
-	//db, err := sql.Open("postgres", "sslmode=disable")
-	//if err != nil {
-	//	log.Errorf("connectDb:DbManager:sql.Open %v", err.Error())
-	//} else {
-	//	log.Infof("Db connected")
-	//}
-	//return db
-
-	dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable",
-		configuration.User, configuration.Password, configuration.Name)
-	db, err := sql.Open("postgres", dbinfo)
+	db, err := sql.Open("postgres", "sslmode=disable")
 	if err != nil {
 		log.Errorf("connectDb:DbManager:sql.Open %v", err.Error())
 	} else {
 		log.Infof("Db connected")
 	}
 	return db
+
+	//dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable",
+	//	configuration.User, configuration.Password, configuration.Name)
+	//db, err := sql.Open("postgres", dbinfo)
+	//if err != nil {
+	//	log.Errorf("connectDb:DbManager:sql.Open %v", err.Error())
+	//} else {
+	//	log.Infof("Db connected")
+	//}
+	//return db
 }
 
 func (b *DbManager) FillDb(withExchanges []*DbExchange) {

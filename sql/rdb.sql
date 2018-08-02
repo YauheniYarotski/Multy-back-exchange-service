@@ -366,13 +366,15 @@ GROUP by exchange_id, target_id, reference_id, is_calculated, to_timestamp(floor
 
 SELECT count(*)
 from rates;
+15325
 
 SELECT count(*)
 from fa_rates_10m;
-
+485
 
 SELECT count(*)
 from fa_rates_30m;
+322
 
 
 SELECT count(*)
