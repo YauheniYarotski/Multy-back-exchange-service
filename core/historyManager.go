@@ -3,7 +3,7 @@ package core
 import (
 	SDK "github.com/CoinAPI/coinapi-sdk/go-rest/v1"
 	"time"
-	"github.com/Appscrunch/Multy-back-exchange-service/currencies"
+	"github.com/Multy-io/Multy-back-exchange-service/currencies"
 )
 
 type HistoryConfiguration struct {

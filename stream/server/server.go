@@ -14,7 +14,7 @@ import (
 	"net"
 	"time"
 
-	"github.com/Appscrunch/Multy-back-exchange-service/currencies"
+	"github.com/Multy-io/Multy-back-exchange-service/currencies"
 	"google.golang.org/grpc"
 	"strconv"
 )

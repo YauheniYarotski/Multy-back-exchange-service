@@ -5,7 +5,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/Appscrunch/Multy-back-exchange-service/stream/server"
+	"github.com/Multy-io/Multy-back-exchange-service/stream/server"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 )

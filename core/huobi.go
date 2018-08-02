@@ -2,10 +2,10 @@ package core
 
 import (
 "time"
-"github.com/Appscrunch/Multy-back-exchange-service/api"
+"github.com/Multy-io/Multy-back-exchange-service/api"
 "fmt"
 "encoding/json"
-"github.com/Appscrunch/Multy-back-exchange-service/currencies"
+"github.com/Multy-io/Multy-back-exchange-service/currencies"
 )
 
 //type BittrexTicker struct {

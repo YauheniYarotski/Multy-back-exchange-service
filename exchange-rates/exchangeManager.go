@@ -6,9 +6,9 @@ import (
 
 	"sync"
 
-	"github.com/Appscrunch/Multy-back-exchange-service/core"
-	"github.com/Appscrunch/Multy-back-exchange-service/currencies"
-	"github.com/Appscrunch/Multy-back-exchange-service/stream/server"
+	"github.com/Multy-io/Multy-back-exchange-service/core"
+	"github.com/Multy-io/Multy-back-exchange-service/currencies"
+	"github.com/Multy-io/Multy-back-exchange-service/stream/server"
 	"fmt"
 	"strconv"
 )

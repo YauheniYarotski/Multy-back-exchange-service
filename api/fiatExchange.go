@@ -8,7 +8,7 @@ import (
 
 	//"fmt"
 	//"fmt"
-	"github.com/Appscrunch/Multy-back-exchange-service/currencies"
+	"github.com/Multy-io/Multy-back-exchange-service/currencies"
 )
 
 

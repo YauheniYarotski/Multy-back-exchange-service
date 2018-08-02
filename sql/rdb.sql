@@ -364,3 +364,21 @@ GROUP by exchange_id, target_id, reference_id, is_calculated, to_timestamp(floor
 ;
 
 
+SELECT count(*)
+from rates;
+
+SELECT count(*)
+from fa_rates_10m;
+
+
+SELECT count(*)
+from fa_rates_30m;
+
+
+SELECT count(*)
+from fa_rates_1h;
+
+
+SELECT fa_aggregate_rates;
+
+select fa_aggregate_rates();

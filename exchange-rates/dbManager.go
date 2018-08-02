@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Appscrunch/Multy-back-exchange-service/currencies"
+	"github.com/Multy-io/Multy-back-exchange-service/currencies"
 	"github.com/KristinaEtc/slf"
 	_ "github.com/KristinaEtc/slflog"
 	_ "github.com/lib/pq"
@@ -50,11 +50,22 @@ type DbRate struct {
 func NewDbManager(configuration DBConfiguration) *DbManager {
 	manager := DbManager{}
 	manager.db = manager.connectDb(configuration)
+	go manager.startAggregatingData()
 	return &manager
 }
 
 func (b *DbManager) connectDb(configuration DBConfiguration) *sql.DB {
-	db, err := sql.Open("postgres", "sslmode=disable")
+	//db, err := sql.Open("postgres", "sslmode=disable")
+	//if err != nil {
+	//	log.Errorf("connectDb:DbManager:sql.Open %v", err.Error())
+	//} else {
+	//	log.Infof("Db connected")
+	//}
+	//return db
+
+	dbinfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable",
+		configuration.User, configuration.Password, configuration.Name)
+	db, err := sql.Open("postgres", dbinfo)
 	if err != nil {
 		log.Errorf("connectDb:DbManager:sql.Open %v", err.Error())
 	} else {
@@ -72,6 +83,23 @@ func (b *DbManager) FillDb(withExchanges []*DbExchange) {
 	}
 	b.fillRateFromSA()
 }
+
+func (self *DbManager) startAggregatingData() {
+
+	for range time.Tick(1 * time.Second) {
+
+		timeNow:= time.Now().Truncate(time.Second)
+		timeTruncated := timeNow.Truncate(time.Minute * 10).Add(time.Minute)
+
+		//each 11th minute run
+		if timeNow == timeTruncated {
+			fmt.Println("agregate rates")
+			self.faAggregateRates()
+		}
+
+	}
+}
+
 
 //
 //func (b *DbManager) insert(exchange *DbExchange) {
@@ -105,6 +133,13 @@ func (b *DbManager) insertSaRate(exchange_title string, target_currency currenci
 
 func (b *DbManager) fillRateFromSA() {
 	_, err := b.db.Exec("SELECT fill_rates()")
+	if err != nil {
+		log.Errorf("DbManager:fillRateFromSA:b.db.Exec %v", err.Error())
+	}
+}
+
+func (self *DbManager) faAggregateRates() {
+	_, err := self.db.Exec("select fa_aggregate_rates()")
 	if err != nil {
 		log.Errorf("DbManager:fillRateFromSA:b.db.Exec %v", err.Error())
 	}

@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	stream "github.com/Appscrunch/Multy-back-exchange-service/stream/server"
-	"github.com/Appscrunch/Multy-back-exchange-service/currencies"
+	stream "github.com/Multy-io/Multy-back-exchange-service/stream/server"
+	"github.com/Multy-io/Multy-back-exchange-service/currencies"
 )
 
 const maxTickerAge = 5
