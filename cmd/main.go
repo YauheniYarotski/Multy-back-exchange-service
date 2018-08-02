@@ -38,7 +38,7 @@ func main() {
 	//	configuration.TargetCurrencies = []string{"LTC","DASH"}
 	configuration.TargetCurrencies = []string{"BTC", "ETH", "GOLOS", "BTS", "STEEM", "WAVES", "LTC", "BCH", "ETC", "DASH", "EOS"}
 	configuration.ReferenceCurrencies = []string{"USDT", "BTC"}
-	configuration.Exchanges = []string{"BINANCE", "BITFINEX"}
+	configuration.Exchanges = []string{"Binance","Bitfinex","Gdax","HitBtc","Okex","Poloniex"}
 	configuration.RefreshInterval = 1
 
 	configuration.HistoryApiKey = "A502B3C1-9C40-446F-9831-CA12EC039AB8"
@@ -49,9 +49,9 @@ func main() {
 	configuration.HistoryEndDate = time.Now().UTC().Add(-3600)
 
 	dbConfig := core.DBConfiguration{}
-	// dbConfig.User = "postgres"
-	// dbConfig.Password = "postgres"
-	// dbConfig.Name = "test"
+	 dbConfig.User = "postgres"
+	 dbConfig.Password = "postgres"
+	 dbConfig.Name = "test"
 	configuration.DBConfiguration = dbConfig
 
 	waitGroup.Add(len(configuration.Exchanges) + 5)

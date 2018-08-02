@@ -295,7 +295,7 @@ WHERE cr.exchange_title = sar.exchange_title and cr.tc_code = sar.target_code an
 and cr.exchange_title = sar_cross.exchange_title and  cr.rc_cross_code = sar_cross.reference_code and cr.rf_code = sar_cross.target_code;
 
 SELECT *
-FROM  sa_cross_rates;
+FROM  rates;
 
 
 
@@ -305,3 +305,62 @@ WHERE exchange_title = p_exchange_title
 and target_code = p_target_code
 and reference_code = 'STEEM'
 ORDER by reference_code, time_stamp DESC;
+
+
+INSERT INTO fa_rates_10m
+SELECT exchange_id, target_id, reference_id, to_timestamp(floor((extract('epoch' from time_stamp) / 600 )) * 600) as time_stamp,  AVG(rate) avg_rate, MAX(rate) max_rate, min(rate) min_rate, is_calculated
+FROM rates
+GROUP by exchange_id, target_id, reference_id, is_calculated, to_timestamp(floor((extract('epoch' from time_stamp) / 600 )) * 600);
+
+
+INSERT INTO fa_rates_30m
+SELECT exchange_id, target_id, reference_id, to_timestamp(floor((extract('epoch' from time_stamp) / 1800 )) * 1800) as time_stamp,  AVG(avg_rate) avg_rate, MAX(max_rate) max_rate, min(min_rate) min_rate, is_calculated
+FROM fa_rates_10m
+GROUP by exchange_id, target_id, reference_id, is_calculated, to_timestamp(floor((extract('epoch' from time_stamp) / 1800 )) * 1800);
+
+
+INSERT INTO fa_rates_1h
+SELECT exchange_id, target_id, reference_id,  date_trunc('hour', time_stamp) as time_stamp,  AVG(avg_rate) avg_rate, MAX(max_rate) max_rate, min(min_rate) min_rate, is_calculated
+FROM fa_rates_30m
+GROUP by exchange_id, target_id, reference_id, is_calculated, date_trunc('hour', time_stamp);
+
+
+INSERT INTO fa_rates_12h
+SELECT exchange_id, target_id, reference_id,  to_timestamp(floor((extract('epoch' from time_stamp) / 43200 )) * 43200) as time_stamp,  AVG(avg_rate) avg_rate, MAX(max_rate) max_rate, min(min_rate) min_rate, is_calculated
+FROM fa_rates_1h
+GROUP by exchange_id, target_id, reference_id, is_calculated, to_timestamp(floor((extract('epoch' from time_stamp) / 43200 )) * 43200);
+
+
+INSERT INTO fa_rates_1d
+SELECT exchange_id, target_id, reference_id,  date_trunc('day', time_stamp) as time_stamp,  AVG(avg_rate) avg_rate, MAX(max_rate) max_rate, min(min_rate) min_rate, is_calculated
+FROM fa_rates_12h
+GROUP by exchange_id, target_id, reference_id, is_calculated, date_trunc('day', time_stamp);
+
+
+
+SELECT max(time_stamp) max_time_stamp, max(time_stamp) - INTERVAL '10 min'
+FROM fa_rates_10m;
+
+
+
+INSERT INTO fa_rates_10m;
+
+
+TRUNCATE table fa_rates_10m;
+
+SELECT *
+from fa_rates_10m;
+
+
+
+
+INSERT INTO fa_rates_10m
+SELECT exchange_id, target_id, reference_id, to_timestamp(floor((extract('epoch' from time_stamp) / 600 )) * 600) as time_stamp,  AVG(rate) avg_rate, MAX(rate) max_rate, min(rate) min_rate, is_calculated
+FROM rates
+where (time_stamp >= (SELECT max(time_stamp) - INTERVAL '10 min' max_time_stamp
+FROM fa_rates_10m)) or (SELECT max(time_stamp) - INTERVAL '10 min' max_time_stamp
+FROM fa_rates_10m) ISNULL
+GROUP by exchange_id, target_id, reference_id, is_calculated, to_timestamp(floor((extract('epoch' from time_stamp) / 600 )) * 600)
+;
+
+
